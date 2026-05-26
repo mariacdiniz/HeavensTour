@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --font-size: 16px;
+  --background: #ffffff;
+  --foreground: #111827;
+  --card: #ffffff;
+  --card-foreground: #111827;
+  --primary: #378add;
+  --primary-foreground: #ffffff;
+  --secondary: #f7f9fc;
+  --secondary-foreground: #111827;
+  --muted: #f7f9fc;
+  --muted-foreground: #6b7280;
+  --accent: #378add;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #e5e7eb;
+  --input: #d1d5db;
+  --input-background: #ffffff;
+  --ring: #378add;
+  --radius: 0.75rem;
+  --sidebar: #f7f9fc;
+  --sidebar-foreground: #111827;
+  --sidebar-accent: #eef2f7;
+  --sidebar-border: #e5e7eb;
+  --chart-1: #378add;
+  --chart-2: #10b981;
+  --chart-3: #f59e0b;
+  --chart-4: #ef4444;
+  --chart-5: #8b5cf6;
+  --brand-navy: #042c53;
+}
+
+.dark {
+  --background: #0a0f1c;
+  --foreground: #f9fafb;
+  --card: #111827;
+  --card-foreground: #f9fafb;
+  --primary: #378add;
+  --primary-foreground: #ffffff;
+  --secondary: #111827;
+  --secondary-foreground: #f9fafb;
+  --muted: #111827;
+  --muted-foreground: #9ca3af;
+  --border: #1f2937;
+  --input: #374151;
+  --input-background: #111827;
+  --sidebar: #111827;
+  --sidebar-foreground: #f9fafb;
+  --sidebar-accent: #1f2937;
+  --sidebar-border: #1f2937;
+}
+
+@theme inline {
+  --font-sans: "Inter", system-ui, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --radius-lg: var(--radius);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    font-size: var(--font-size);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+@layer utilities {
+  .container-app {
+    @apply mx-auto w-full max-w-7xl px-6 lg:px-8;
+  }
+
+  /** Formulário de contato — alinhado ao Figma (max-w-2xl, sem o max-w-7xl do container-app) */
+  .container-narrow {
+    @apply mx-auto w-full max-w-2xl px-6 lg:px-8;
+  }
+}

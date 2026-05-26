@@ -1,0 +1,19 @@
+# Apenas MongoDB — use quando a API roda no Windows (npm run dev)
+# docker compose -f docker-compose.mongo-only.yml up -d
+services:
+  mongo:
+    image: mongo:7
+    container_name: heavenstour-mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ['CMD', 'mongosh', '--eval', "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+volumes:
+  mongo_data:

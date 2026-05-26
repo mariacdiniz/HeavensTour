@@ -1,0 +1,9 @@
+# Staging — MongoDB Atlas + S3 real (substitua variáveis no .env)
+services:
+  api:
+    build: .
+    ports:
+      - '3333:3333'
+    env_file:
+      - .env.staging
+    restart: unless-stopped
