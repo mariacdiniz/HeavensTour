@@ -5,12 +5,11 @@ const registerSchema = z.object({
   email: z.string().email('E-mail inválido'),
   senha: z.string().min(6, 'Senha deve ter pelo menos 6 caracteres').optional(),
   password: z.string().min(6).optional(),
-  role: z.enum(['user', 'admin']).optional().default('user'),
 }).transform((data) => ({
   nome: data.nome,
   email: data.email,
   senha: data.senha || data.password,
-  role: data.role,
+  role: 'user',
 })).refine((data) => Boolean(data.senha), { message: 'Senha obrigatória', path: ['senha'] })
 
 const loginSchema = z
