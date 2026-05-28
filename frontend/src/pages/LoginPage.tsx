@@ -166,7 +166,7 @@ export function LoginPage() {
 
       <Link
         to="/"
-        className="absolute bottom-1 text-sm text-muted-foreground transition-colors hover:text-primary"
+        className="absolute bottom-5 text-sm text-muted-foreground transition-colors hover:text-primary"
       >
         Voltar ao site
       </Link>

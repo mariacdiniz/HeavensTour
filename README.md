@@ -49,29 +49,185 @@ O back-end organiza regras de negócio em camadas (controllers → services/use 
 
 ```
 HeavensTour/
+├── .gitignore
+├── README.md
+│
 ├── backend/
-│   ├── app/
-│   │   ├── controllers/
-│   │   ├── services/
-│   │   ├── useCase/auth/
-│   │   ├── models/
-│   │   ├── middlewares/
-│   │   ├── schemas/        ← validação Zod
-│   │   ├── utils/          ← ICAO, autonomia, ownerFilter
-│   │   ├── integrations/   ← S3 / upload local
-│   │   └── docs/swagger.js
-│   ├── routes/
-│   ├── config/env.js
-│   ├── scripts/seed.js
-│   ├── tests/unit + tests/integration
-│   ├── docker-compose.yml
+│   ├── index.js                 ← entrada da API
+│   ├── worker.js
+│   ├── bull-board.js
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── jest.config.js
+│   ├── nodemon.json
+│   ├── Dockerfile
+│   ├── .env.example
+│   ├── .editorconfig
+│   ├── .gitignore
+│   ├── README.md
 │   ├── TESTING.md
-│   └── .env.example
-├── frontend/
-│   ├── src/features/       ← auth, aircraft, dashboard
-│   ├── src/pages/          ← site público + área logada
-│   └── .env.example
-└── README.md
+│   ├── deploy.sh
+│   ├── docker-compose.yml
+│   ├── docker-compose.mongo-only.yml
+│   ├── docker-compose.staging.yml
+│   │
+│   ├── config/
+│   │   ├── env.js               ← variáveis + CORS
+│   │   ├── database.js          ← conexão MongoDB
+│   │   └── jwt.js
+│   │
+│   ├── routes/
+│   │   ├── index.js             ← /, /health, montagem das rotas
+│   │   ├── auth.routes.js
+│   │   ├── aircraft.routes.js
+│   │   └── report.routes.js
+│   │
+│   ├── app/
+│   │   ├── factory.js           ← monta Express (CORS, Swagger, rotas)
+│   │   ├── zod-extend.js
+│   │   ├── controllers/
+│   │   │   ├── auth.controller.js
+│   │   │   ├── aircraft.controller.js
+│   │   │   └── report.controller.js
+│   │   ├── services/
+│   │   │   ├── auth.service.js
+│   │   │   ├── aircraft.service.js
+│   │   │   ├── report.service.js
+│   │   │   └── upload.service.js
+│   │   ├── useCase/
+│   │   │   └── auth/
+│   │   │       ├── login.useCase.js
+│   │   │       └── register.useCase.js
+│   │   ├── models/
+│   │   │   ├── User.js
+│   │   │   └── Aircraft.js
+│   │   ├── middlewares/
+│   │   │   ├── auth.middleware.js
+│   │   │   ├── role.middleware.js
+│   │   │   ├── validate.middleware.js
+│   │   │   └── errorHandler.middleware.js
+│   │   ├── schemas/
+│   │   │   ├── auth.schema.js
+│   │   │   └── aircraft.schema.js
+│   │   ├── utils/
+│   │   │   ├── icao.js
+│   │   │   ├── autonomy.js
+│   │   │   ├── manufacturer.js
+│   │   │   └── ownerFilter.js
+│   │   ├── integrations/
+│   │   │   └── s3Client.js
+│   │   ├── observability/
+│   │   │   └── logger.js
+│   │   └── docs/
+│   │       └── swagger.js
+│   │
+│   ├── scripts/
+│   │   ├── seed.js
+│   │   └── wait-deps.js
+│   │
+│   ├── monitoring/
+│   │   └── health.js
+│   │
+│   └── tests/
+│       ├── setup.js
+│       ├── unit/
+│       │   ├── icao.test.js
+│       │   ├── autonomy.test.js
+│       │   └── manufacturer.test.js
+│       └── integration/
+│           ├── auth.test.js
+│           └── aircraft.test.js
+│
+└── frontend/
+    ├── index.html
+    ├── package.json
+    ├── vite.config.ts
+    ├── tsconfig.json
+    ├── tsconfig.app.json
+    ├── tsconfig.node.json
+    ├── eslint.config.js
+    ├── components.json
+    ├── vercel.json
+    ├── .env.example
+    ├── .gitignore
+    ├── README.md
+    │
+    ├── public/
+    │   ├── favicon.svg
+    │   ├── icons.svg
+    │   └── models/
+    │
+    └── src/
+        ├── main.tsx
+        ├── App.tsx
+        ├── index.css
+        │
+        ├── api/
+        │   ├── client.ts
+        │   ├── auth.api.ts
+        │   ├── aircraft.api.ts
+        │   └── mock-store.ts
+        │
+        ├── assets/              ← imagens do site
+        │
+        ├── components/
+        │   ├── aircraft/        ← formulário, tabela, filtros, upload
+        │   ├── brand/
+        │   ├── dashboard/       ← gráficos e cards de métricas
+        │   ├── layout/          ← PublicLayout, AppShell, sidebar, header
+        │   ├── motion/
+        │   └── ui/              ← botões, inputs, card, etc.
+        │
+        ├── contexts/
+        │   ├── AuthContext.tsx
+        │   ├── ThemeContext.tsx
+        │   └── ToastContext.tsx
+        │
+        ├── data/
+        │   ├── constants.ts
+        │   ├── media.ts
+        │   ├── aircraft-filters.ts
+        │   └── mock-aircraft.ts
+        │
+        ├── hooks/
+        │   ├── useAircrafts.ts
+        │   └── useDebouncedValue.ts
+        │
+        ├── lib/
+        │   └── utils.ts
+        │
+        ├── pages/
+        │   ├── public/          ← Home, Plataforma, Sobre, Contato
+        │   ├── LoginPage.tsx
+        │   ├── RegisterPage.tsx
+        │   ├── DashboardPage.tsx
+        │   ├── AircraftListPage.tsx
+        │   ├── AircraftFormPage.tsx
+        │   └── NotFoundPage.tsx
+        │
+        ├── routes/
+        │   ├── AppRoutes.tsx
+        │   ├── ProtectedRoute.tsx
+        │   └── LazyAircraftScene.tsx
+        │
+        ├── three/
+        │   └── AircraftScene.tsx
+        │
+        ├── types/
+        │   ├── auth.ts
+        │   ├── aircraft.ts
+        │   └── reports.ts
+        │
+        ├── utils/
+        │   ├── autonomy.ts
+        │   ├── format.ts
+        │   ├── file.ts
+        │   └── imageUrl.ts
+        │
+        └── validations/
+            ├── auth.schema.ts
+            ├── register.schema.ts
+            └── aircraft.schema.ts
 ```
 
 ---
@@ -206,8 +362,6 @@ AWS_BUCKET=heavens-tour-aircraft
 ```env
 VITE_API_URL=http://localhost:3333
 ```
-
-> ⚠️ Nunca versione `.env` com valores reais. Apenas `.env.example` no repositório.
 
 ### Ambiente de desenvolvimento (após `npm run seed`)
 

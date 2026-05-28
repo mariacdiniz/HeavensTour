@@ -80,8 +80,7 @@ export function RegisterPage() {
           <div className="mb-8 text-center">
             <h1 className="mb-2 text-xl font-medium">Criar sua conta</h1>
             <p className="text-sm text-muted-foreground">
-              Cadastre-se para gerenciar a frota. O perfil (operador ou gestor) é
-              definido automaticamente no login.
+              Cadastre-se para gerenciar a frota.
             </p>
           </div>
 
@@ -176,7 +175,7 @@ export function RegisterPage() {
 
       <Link
         to="/"
-        className="absolute bottom-1 text-sm text-muted-foreground hover:text-primary"
+        className="absolute bottom-5 text-sm text-muted-foreground hover:text-primary"
       >
         Voltar ao site
       </Link>

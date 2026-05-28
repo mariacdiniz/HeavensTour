@@ -1,4 +1,4 @@
-import { Search, Plus, X } from 'lucide-react'
+import { Search, Plus, X, ChevronDown } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -14,7 +14,7 @@ interface AircraftFiltersProps {
 }
 
 const selectClass =
-  'h-11 rounded-lg border border-input bg-[var(--input-background)] px-4 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+  'h-10 rounded-lg border border-input bg-[var(--input-background)] pl-4 pr-10 text-sm text-foreground appearance-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring '
 
 export function AircraftFilters({ filters, onChange, onClear }: AircraftFiltersProps) {
   const showClear = hasActiveFilters(filters)
@@ -25,7 +25,7 @@ export function AircraftFilters({ filters, onChange, onClear }: AircraftFiltersP
         <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           placeholder="Buscar por nome do modelo..."
-          className="h-11 rounded-lg pl-10"
+          className="h-10 rounded-lg pl-10"
           value={filters.nome ?? ''}
           onChange={(e) =>
             onChange({ ...filters, nome: e.target.value || undefined, page: 1 })
@@ -33,25 +33,28 @@ export function AircraftFilters({ filters, onChange, onClear }: AircraftFiltersP
         />
       </div>
 
-      <select
-        className={selectClass}
-        value={filters.marca ?? ''}
-        onChange={(e) =>
-          onChange({ ...filters, marca: e.target.value || undefined, page: 1 })
-        }
-      >
-        <option value="">Todos os fabricantes</option>
-        {MANUFACTURERS.map((m) => (
-          <option key={m} value={m}>
-            {m}
-          </option>
-        ))}
-      </select>
+      <div className="relative">
+        <select
+          className={selectClass}
+          value={filters.marca ?? ''}
+          onChange={(e) =>
+            onChange({ ...filters, marca: e.target.value || undefined, page: 1 })
+          }
+        >
+          <option value="">Todos os fabricantes</option>
+          {MANUFACTURERS.map((m) => (
+            <option key={m} value={m}>
+              {m}
+            </option>
+          ))}
+        </select>
+        <ChevronDown className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+      </div>
 
       <Input
         type="number"
         placeholder="Ano"
-        className={cn(selectClass, 'w-28')}
+        className={cn(selectClass, 'w-25')}
         value={filters.ano ?? ''}
         onChange={(e) =>
           onChange({
@@ -62,43 +65,49 @@ export function AircraftFilters({ filters, onChange, onClear }: AircraftFiltersP
         }
       />
 
-      <select
-        className={selectClass}
-        value={filters.categoriaAutonomia ?? ''}
-        onChange={(e) =>
-          onChange({
-            ...filters,
-            categoriaAutonomia:
-              (e.target.value as AircraftSearchParams['categoriaAutonomia']) ||
-              undefined,
-            page: 1,
-          })
-        }
-      >
-        <option value="">Todas as autonomias</option>
-        <option value="Curta">Curta</option>
-        <option value="Média">Média</option>
-        <option value="Longa">Longa</option>
-      </select>
+      <div className="relative">
+        <select
+          className={selectClass}
+          value={filters.categoriaAutonomia ?? ''}
+          onChange={(e) =>
+            onChange({
+              ...filters,
+              categoriaAutonomia:
+                (e.target.value as AircraftSearchParams['categoriaAutonomia']) ||
+                undefined,
+              page: 1,
+            })
+          }
+        >
+          <option value="">Todas as autonomias</option>
+          <option value="Curta">Curta</option>
+          <option value="Média">Média</option>
+          <option value="Longa">Longa</option>
+        </select>
+        <ChevronDown className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+      </div>
 
-      <select
-        className={selectClass}
-        value={
-          filters.vendido === undefined ? '' : filters.vendido ? 'true' : 'false'
-        }
-        onChange={(e) => {
-          const v = e.target.value
-          onChange({
-            ...filters,
-            vendido: v === '' ? undefined : v === 'true',
-            page: 1,
-          })
-        }}
-      >
-        <option value="">Todos os status</option>
-        <option value="false">Disponível</option>
-        <option value="true">Vendida</option>
-      </select>
+      <div className="relative">
+        <select
+          className={selectClass}
+          value={
+            filters.vendido === undefined ? '' : filters.vendido ? 'true' : 'false'
+          }
+          onChange={(e) => {
+            const v = e.target.value
+            onChange({
+              ...filters,
+              vendido: v === '' ? undefined : v === 'true',
+              page: 1,
+            })
+          }}
+        >
+          <option value="">Todos os status</option>
+          <option value="false">Disponível</option>
+          <option value="true">Vendida</option>
+        </select>
+        <ChevronDown className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+      </div>
 
       {showClear && (
         <Button
@@ -112,7 +121,7 @@ export function AircraftFilters({ filters, onChange, onClear }: AircraftFiltersP
         </Button>
       )}
 
-      <Button className="h-11 shrink-0 gap-2 rounded-lg" asChild>
+      <Button className="h-10 shrink-0 gap-2 rounded-lg" asChild>
         <Link to="/app/aeronaves/nova">
           <Plus className="size-4" />
           Nova aeronave
