@@ -363,8 +363,6 @@ AWS_BUCKET=heavens-tour-aircraft
 VITE_API_URL=http://localhost:3333
 ```
 
-> ⚠️ Nunca versione `.env` com valores reais. Apenas `.env.example` no repositório.
-
 ### Ambiente de desenvolvimento (após `npm run seed`)
 
 | Perfil | E-mail | Senha |
