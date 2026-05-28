@@ -5,6 +5,7 @@ import type { Aircraft } from '@/types/aircraft'
 import { AutonomyBadge, StatusBadge } from '@/components/aircraft/AircraftBadges'
 import { Button } from '@/components/ui/button'
 import { formatDate, formatKm } from '@/utils/format'
+import { resolveAircraftImageUrl } from '@/utils/imageUrl'
 
 interface AircraftCardProps {
   aircraft: Aircraft
@@ -19,6 +20,8 @@ export function AircraftCard({
   onDelete,
   showDelete,
 }: AircraftCardProps) {
+  const imageSrc = resolveAircraftImageUrl(aircraft.imagemUrl)
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 10 }}
@@ -28,9 +31,9 @@ export function AircraftCard({
       className="glass-panel overflow-hidden"
     >
       <div className="relative aspect-[16/10] bg-runway">
-        {aircraft.imagemUrl ? (
+        {imageSrc ? (
           <img
-            src={aircraft.imagemUrl}
+            src={imageSrc}
             alt={aircraft.nome}
             className="size-full object-cover"
           />

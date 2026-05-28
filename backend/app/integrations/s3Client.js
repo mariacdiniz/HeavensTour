@@ -8,6 +8,7 @@ const {
 } = require('@aws-sdk/client-s3')
 const env = require('../../config/env')
 const logger = require('../observability/logger')
+const { getUploadDir } = require('../utils/uploadPaths')
 
 let s3Client = null
 
@@ -66,7 +67,7 @@ async function uploadToS3(buffer, key, contentType) {
 }
 
 function ensureLocalUploadDir() {
-  const dir = path.resolve(process.cwd(), env.uploadDir)
+  const dir = getUploadDir()
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true })
   }

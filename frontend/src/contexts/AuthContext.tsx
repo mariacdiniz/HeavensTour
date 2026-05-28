@@ -14,7 +14,9 @@ interface AuthContextValue {
   token: string | null
   isAuthenticated: boolean
   isLoading: boolean
+  isAdminAccount: boolean
   login: (payload: LoginInput) => Promise<void>
+  setSession: (token: string, user: User) => void
   logout: () => void
   hasRole: (role: UserRole) => boolean
 }
@@ -41,18 +43,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   )
   const [isLoading, setIsLoading] = useState(false)
 
-  const login = useCallback(async (payload: LoginInput) => {
-    setIsLoading(true)
-    try {
-      const response = await authApi.login(payload)
-      localStorage.setItem(TOKEN_KEY, response.token)
-      localStorage.setItem(USER_KEY, JSON.stringify(response.user))
-      setToken(response.token)
-      setUser(response.user)
-    } finally {
-      setIsLoading(false)
-    }
+  const isAdminAccount = user?.role === 'admin'
+
+  const setSession = useCallback((newToken: string, newUser: User) => {
+    localStorage.setItem(TOKEN_KEY, newToken)
+    localStorage.setItem(USER_KEY, JSON.stringify(newUser))
+    setToken(newToken)
+    setUser(newUser)
   }, [])
+
+  const login = useCallback(
+    async (payload: LoginInput) => {
+      setIsLoading(true)
+      try {
+        const response = await authApi.login(payload)
+        setSession(response.token, response.user)
+      } finally {
+        setIsLoading(false)
+      }
+    },
+    [setSession],
+  )
 
   const logout = useCallback(() => {
     localStorage.removeItem(TOKEN_KEY)
@@ -63,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const hasRole = useCallback(
     (role: UserRole) => user?.role === role,
-    [user],
+    [user?.role],
   )
 
   const value = useMemo(
@@ -72,11 +83,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       token,
       isAuthenticated: Boolean(token && user),
       isLoading,
+      isAdminAccount,
       login,
+      setSession,
       logout,
       hasRole,
     }),
-    [user, token, isLoading, login, logout, hasRole],
+    [user, token, isLoading, isAdminAccount, login, setSession, logout, hasRole],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

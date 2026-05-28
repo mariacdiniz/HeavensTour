@@ -14,13 +14,12 @@ import { AircraftIcon } from '@/components/brand/AircraftIcon'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
-import { SelectField } from '@/components/ui/select-field'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { APP_NAME } from '@/data/constants'
 import { Spinner } from '@/components/ui/spinner'
 
 export function RegisterPage() {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, setSession } = useAuth()
   const { toast } = useToast()
   const [showPassword, setShowPassword] = useState(false)
 
@@ -30,7 +29,7 @@ export function RegisterPage() {
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { nome: '', email: '', password: '', role: 'user' },
+    defaultValues: { nome: '', email: '', password: '' },
   })
 
   if (isAuthenticated) {
@@ -43,10 +42,8 @@ export function RegisterPage() {
         nome: values.nome,
         email: values.email,
         password: values.password,
-        role: values.role,
       })
-      localStorage.setItem('heavens_tour_token', result.token)
-      localStorage.setItem('heavens_tour_user', JSON.stringify(result.user))
+      setSession(result.token, result.user)
       toast({ title: 'Conta criada com sucesso', variant: 'success' })
       window.location.href = '/app/dashboard'
     } catch (e: unknown) {
@@ -83,7 +80,8 @@ export function RegisterPage() {
           <div className="mb-8 text-center">
             <h1 className="mb-2 text-xl font-medium">Criar sua conta</h1>
             <p className="text-sm text-muted-foreground">
-              Cadastre-se para gerenciar a frota
+              Cadastre-se para gerenciar a frota. O perfil (operador ou gestor) é
+              definido automaticamente no login.
             </p>
           </div>
 
@@ -150,11 +148,6 @@ export function RegisterPage() {
                 </p>
               )}
             </div>
-
-            <SelectField label="Perfil de acesso" id="role" {...register('role')}>
-              <option value="user">Operador</option>
-              <option value="admin">Administrador</option>
-            </SelectField>
 
             <Button
               type="submit"

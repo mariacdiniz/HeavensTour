@@ -14,10 +14,16 @@ async function bootstrap() {
   const app = buildApp()
 
   app.listen(env.port, () => {
-    logger.info(
-      { port: env.port, docs: `http://localhost:${env.port}/api-docs` },
-      'HeavensTour API no ar',
-    )
+    const meta = {
+      port: env.port,
+      docs: `http://localhost:${env.port}/api-docs`,
+      uploadMode: env.uploadMode,
+    }
+    if (env.uploadMode === 'local') {
+      const { getUploadDir } = require('./app/utils/uploadPaths')
+      meta.uploadDir = getUploadDir()
+    }
+    logger.info(meta, 'HeavensTour API no ar')
   })
 }
 

@@ -9,6 +9,7 @@ const routes = require('../routes')
 const { errorHandler } = require('./middlewares/errorHandler.middleware')
 const swaggerDocument = require('./docs/swagger')
 const { ensureLocalUploadDir } = require('./integrations/s3Client')
+const { getUploadDir } = require('./utils/uploadPaths')
 
 function buildApp() {
   if (env.uploadMode === 'local') {
@@ -34,7 +35,9 @@ function buildApp() {
   app.use(express.urlencoded({ extended: true }))
 
   if (env.uploadMode === 'local') {
-    app.use('/uploads', express.static(path.resolve(env.uploadDir)))
+    const uploadDir = getUploadDir()
+    ensureLocalUploadDir()
+    app.use('/uploads', express.static(uploadDir))
   }
 
   app.use(

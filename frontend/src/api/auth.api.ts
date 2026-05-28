@@ -19,7 +19,6 @@ export const authApi = {
     nome: string
     email: string
     password: string
-    role?: 'user' | 'admin'
   }): Promise<AuthResponse> {
     if (USE_MOCK) {
       throw new Error('Registro mock não implementado — use a API')
@@ -29,7 +28,6 @@ export const authApi = {
       nome: payload.nome,
       email: payload.email,
       password: payload.password,
-      role: payload.role ?? 'user',
     })
     return data
   },

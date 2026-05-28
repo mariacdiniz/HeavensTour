@@ -5,6 +5,7 @@ import { AutonomyBadge, StatusBadge } from '@/components/aircraft/AircraftBadges
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { formatDate, formatKm, formatNumber } from '@/utils/format'
+import { resolveAircraftImageUrl } from '@/utils/imageUrl'
 
 interface AircraftDetailModalProps {
   aircraft: Aircraft | null
@@ -13,6 +14,8 @@ interface AircraftDetailModalProps {
 
 export function AircraftDetailModal({ aircraft, onClose }: AircraftDetailModalProps) {
   if (!aircraft) return null
+
+  const imageSrc = resolveAircraftImageUrl(aircraft.imagemUrl)
 
   return (
     <div
@@ -25,9 +28,9 @@ export function AircraftDetailModal({ aircraft, onClose }: AircraftDetailModalPr
         onClick={(e) => e.stopPropagation()}
       >
         <div className="relative aspect-[16/7] bg-muted">
-          {aircraft.imagemUrl ? (
+          {imageSrc ? (
             <img
-              src={aircraft.imagemUrl}
+              src={imageSrc}
               alt={aircraft.nome}
               className="size-full object-cover"
             />

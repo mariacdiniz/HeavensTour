@@ -1,5 +1,7 @@
 const request = require('supertest')
+const bcrypt = require('bcryptjs')
 const { buildApp } = require('../../app/factory')
+const User = require('../../app/models/User')
 
 let app
 
@@ -8,10 +10,11 @@ beforeAll(() => {
 })
 
 async function getAdminToken() {
-  await request(app).post('/auth/register').send({
+  const passwordHash = await bcrypt.hash('admin123', 10)
+  await User.create({
     nome: 'Admin',
     email: 'admin@test.com',
-    senha: 'admin123',
+    passwordHash,
     role: 'admin',
   })
   const login = await request(app).post('/auth/login').send({

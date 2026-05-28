@@ -37,6 +37,18 @@ describe('Auth API', () => {
     expect(res.body.token).toBeDefined()
   })
 
+  it('POST /auth/register ignora role admin no body', async () => {
+    const res = await request(app).post('/auth/register').send({
+      nome: 'Hacker',
+      email: 'hacker@heavenstour.com',
+      senha: 'senha123',
+      role: 'admin',
+    })
+
+    expect(res.status).toBe(201)
+    expect(res.body.user.role).toBe('user')
+  })
+
   it('POST /auth/login com password (alias front)', async () => {
     await request(app).post('/auth/register').send({
       nome: 'Alias',
